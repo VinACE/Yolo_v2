@@ -6,10 +6,8 @@ import warnings
 import git
 import torch
 import torchvision.transforms as transforms
-import visdom
-import wandb
 
-import yolov1
+import yolov2
 
 from torchsummary.torchsummary import summary
 from utilities.dataloader import detection_collate

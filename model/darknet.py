@@ -114,3 +114,27 @@ class Darknet19(BaseModel):
         out = self.features(x)
         out = self.classifier(out)
         return out
+
+
+class YOLOv2(BaseModel):
+    def __init__(self):
+        super(YOLOv2, self).__init__()
+        
+        self.darknet = Darknet19()
+        self.backbone = self.darknet.features
+        self.conv1 = nn.Conv2d()
+        self.conv2 = nn.Conv2d()
+        self.conv3 = nn.Conv2d()
+
+        self.freeze_darknet()
+
+    def forward(self, x):
+        out = self.backbone(x)
+        out = self.conv1(out)
+        out = self.conv2(out)
+        out = self.conv3(out)
+
+    def freeze_darknet(self):
+        #self.backbone 을 얼림 
+        
+        return out
