@@ -98,8 +98,14 @@ def detection_loss_4_yolo(output, target, device):
 
     # predict & obj
     for i in range(num_object):
+        #sigmoid 0bj
+        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],0] = torch.sigmoid(output[non_zero[i,0],non_zero[i,1],non_zero[i,2],0]) 
+        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],25] = torch.sigmoid(output[non_zero[i,0],non_zero[i,1],non_zero[i,2],25])
+        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],50] = torch.sigmoid(output[non_zero[i,0],non_zero[i,1],non_zero[i,2],50])
+        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],75] = torch.sigmoid(output[non_zero[i,0],non_zero[i,1],non_zero[i,2],75])
+        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],100] = torch.sigmoid(output[non_zero[i,0],non_zero[i,1],non_zero[i,2],100])
+
         #sigmoid + Cx, Cy
-        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],0] = torch.sigmoid(output[non_zero[i,0],non_zero[i,1],non_zero[i,2],0]) #+ non_zero[i,1].float()
         predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],1] = torch.sigmoid(output[non_zero[i,0],non_zero[i,1],non_zero[i,2],1]) #+ non_zero[i,1].float()
         predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],2] = torch.sigmoid(output[non_zero[i,0],non_zero[i,1],non_zero[i,2],2]) #+ non_zero[i,2].float()
         predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],26] = torch.sigmoid(output[non_zero[i,0],non_zero[i,1],non_zero[i,2],26]) #+ non_zero[i,1].float()
@@ -111,18 +117,23 @@ def detection_loss_4_yolo(output, target, device):
         predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],101] = torch.sigmoid(output[non_zero[i,0],non_zero[i,1],non_zero[i,2],101]) #+ non_zero[i,1].float()
         predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],102] = torch.sigmoid(output[non_zero[i,0],non_zero[i,1],non_zero[i,2],102]) #+ non_zero[i,2].float()
         #bw, bh
-        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],3] = anchors[i,0] * torch.exp ( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],3] )
-        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],4] = anchors[i,1] * torch.exp ( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],4] )
-        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],28] = anchors[i,0] * torch.exp ( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],28] )
-        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],29] = anchors[i,1] * torch.exp ( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],29] )
-        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],53] = anchors[i,0] * torch.exp ( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],53] )
-        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],54] = anchors[i,1] * torch.exp ( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],54] )
-        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],78] = anchors[i,0] * torch.exp ( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],78] )
-        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],79] = anchors[i,1] * torch.exp ( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],79] )
-        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],103] = anchors[i,0] * torch.exp ( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],103] )
-        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],104] = anchors[i,1] * torch.exp ( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],104] )
+        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],3] = anchors[0,0] * torch.exp ( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],3] )
+        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],4] = anchors[0,1] * torch.exp ( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],4] )
+        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],28] = anchors[1,0] * torch.exp ( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],28] )
+        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],29] = anchors[1,1] * torch.exp ( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],29] )
+        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],53] = anchors[2,0] * torch.exp ( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],53] )
+        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],54] = anchors[2,1] * torch.exp ( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],54] )
+        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],78] = anchors[3,0] * torch.exp ( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],78] )
+        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],79] = anchors[3,1] * torch.exp ( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],79] )
+        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],103] = anchors[4,0] * torch.exp ( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],103] )
+        predict[non_zero[i,0],non_zero[i,1],non_zero[i,2],104] = anchors[4,1] * torch.exp ( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],104] )
         #ratio
         ratio[non_zero[i,0],non_zero[i,1],non_zero[i,2],:] = 1.
+        ratio[non_zero[i,0],non_zero[i,1],non_zero[i,2],1:5] = 5.
+        ratio[non_zero[i,0],non_zero[i,1],non_zero[i,2],26:30] = 5.
+        ratio[non_zero[i,0],non_zero[i,1],non_zero[i,2],51:55] = 5.
+        ratio[non_zero[i,0],non_zero[i,1],non_zero[i,2],76:80] = 5.
+        ratio[non_zero[i,0],non_zero[i,1],non_zero[i,2],101:105] = 5.
         '''
         ratio[non_zero[i,0],non_zero[i,1],non_zero[i,2],25] = 1
         ratio[non_zero[i,0],non_zero[i,1],non_zero[i,2],50] = 1
@@ -172,9 +183,10 @@ def detection_loss_4_yolo(output, target, device):
     dog_target = label[non_zero[0,0],non_zero[0,1],non_zero[0,2],:]
     human_target = label[non_zero[1,0],non_zero[1,1],non_zero[1,2],:]
     dog_ratio = ratio[non_zero[0,0],non_zero[0,1],non_zero[0,2],:]
+    human_target = ratio[non_zero[1,0],non_zero[1,1],non_zero[1,2],:]
     
     loss = ratio * (label - predict) * (label - predict)
-
+    loss_example = loss[non_zero[0,0],non_zero[0,1],non_zero[0,2],:]
     loss = loss.view(-1)
     loss = torch.sum(loss) / b
 

@@ -108,12 +108,12 @@ def train(params):
 
     # for epoch in range(num_epochs):
     for epoch in range(1, num_epochs + 1):
-
+        
         if(epoch % 90 ==0 and epoch >160):
             learning_rate /= 10
             optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=1e-5)
             scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.9)
-
+        
         if (epoch == 200) or (epoch == 400) or (epoch == 600) or (epoch == 20000) or (epoch == 30000):
             scheduler.step()
 

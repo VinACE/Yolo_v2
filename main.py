@@ -15,7 +15,7 @@ parser.add_argument('--input_height', type=int, help='input height', default=416
 parser.add_argument('--input_width', type=int, help='input width', default=416)
 parser.add_argument('--batch_size', type=int, help='batch size', default=1)
 parser.add_argument('--num_epochs', type=int, help='number of epochs', default=50000)
-parser.add_argument('--learning_rate', type=float, help='initial learning rate', default=5e-5)
+parser.add_argument('--learning_rate', type=float, help='initial learning rate', default=1e-3)
 parser.add_argument('--checkpoint_path', type=str, help='path to a specific checkpoint to load', default='./')
 
 # flag
