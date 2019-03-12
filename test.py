@@ -2,7 +2,6 @@
 
 import os
 import torch
-import yolov1
 import matplotlib.pyplot as plt
 import numpy as np
 import io
@@ -22,7 +21,7 @@ def test(params):
     data_path = params["data_path"]
     datalist_path = params["datalist_path"]
     class_path = params["class_path"]
-    num_gpus = [i for i in range(params["num_gpus"])]
+    num_gpus = [i for i in range(1)]
     checkpoint_path = params["checkpoint_path"]
 
     USE_SUMMARY = params["use_summary"]
@@ -37,7 +36,7 @@ def test(params):
 
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
-    net = yolov1.YOLOv1(params={"dropout": 1.0, "num_class": num_class})
+    net = yolov2.YOLOv2()
     # model = torch.nn.DataParallel(net, device_ids=num_gpus).cuda()
     print("device : ", device)
     if device is "cpu":
@@ -56,7 +55,7 @@ def test(params):
     if not (datalist_path =='./'):
         root = next(os.walk(os.path.abspath(data_path)))[0]
         dir = next(os.walk(os.path.abspath(data_path)))[1]
-        files =['000003']#,'000002','000003','000004']#,'000005','000006','000007','000008','000009',]
+        files =['000001']#,'000002','000003','000004']#,'000005','000006','000007','000008','000009',]
         #with io.open(datalist_path,encoding='utf8') as f:
         #    for i in f.readlines():
         #        files.append(i.splitlines()[0])
@@ -84,8 +83,8 @@ def test(params):
         W, H = img.size
         draw = ImageDraw.Draw(img)
 
-        dx = W // 7
-        dy = H // 7
+        dx = W // 13
+        dy = H // 13
         ##################################
 
         input_img = input_img.view(1, c, w, h)
@@ -130,8 +129,8 @@ def test(params):
         print("outputs_np : {}".format(outputs_np.shape))
 
         try:
-            for i in range(7):
-                for j in range(7):
+            for i in range(13):
+                for j in range(13):
                     draw.rectangle(((dx * i, dy * j), (dx * i + dx, dy * j + dy)), outline='#00ff88')
                     one = objness[i][j][0]
                     two = objness[i][j][1]
@@ -160,8 +159,6 @@ def test(params):
                         ymin = center_y - (height // 2)
                         xmax = xmin + width
                         ymax = ymin + height
-                        if(i==3 and j==3):
-                            print('person')
                         if one_clsprob[one_cls_idx] > class_threshold:
                             if (one_cls_idx == two_cls_idx) and (one_clsprob[one_cls_idx] >= two_clsprob[two_cls_idx]):
                                 draw.rectangle(((xmin + 2, ymin + 2), (xmax - 2, ymax - 2)), outline="blue")

@@ -73,7 +73,7 @@ class Darknet19(BaseModel):
             ('conv5_3', nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1, bias=False)),
             ('bn5_3', nn.BatchNorm2d(512)),
             ('leaky5_3', nn.LeakyReLU(0.1, inplace=True)),
-            ('conv5_4', nn.Conv2d(512, 256, kernel_size=1, stride=1, padding=1, bias=False)),
+            ('conv5_4', nn.Conv2d(512, 256, kernel_size=1, stride=1, padding=0, bias=False)),
             ('bn5_4', nn.BatchNorm2d(256)),
             ('leaky5_4', nn.LeakyReLU(0.1, inplace=True)),
             ('conv5_5', nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1, bias=False)),
@@ -91,7 +91,7 @@ class Darknet19(BaseModel):
             ('conv6_3', nn.Conv2d(512, 1024, kernel_size=3, stride=1, padding=1, bias=False)),
             ('bn6_3', nn.BatchNorm2d(1024)),
             ('leaky6_3', nn.LeakyReLU(0.1, inplace=True)),
-            ('conv6_4', nn.Conv2d(1024, 512, kernel_size=1, stride=1, padding=1, bias=False)),
+            ('conv6_4', nn.Conv2d(1024, 512, kernel_size=1, stride=1, padding=0, bias=False)),
             ('bn6_4', nn.BatchNorm2d(512)),
             ('leaky6_4', nn.LeakyReLU(0.1, inplace=True)),
             ('conv6_5', nn.Conv2d(512, 1024, kernel_size=3, stride=1, padding=1, bias=False)),
@@ -114,27 +114,10 @@ class Darknet19(BaseModel):
         out = self.features(x)
         out = self.classifier(out)
         return out
-
-
-class YOLOv2(BaseModel):
-    def __init__(self):
-        super(YOLOv2, self).__init__()
-        
-        self.darknet = Darknet19()
-        self.backbone = self.darknet.features
-        self.conv1 = nn.Conv2d()
-        self.conv2 = nn.Conv2d()
-        self.conv3 = nn.Conv2d()
-
-        self.freeze_darknet()
-
-    def forward(self, x):
-        out = self.backbone(x)
-        out = self.conv1(out)
-        out = self.conv2(out)
-        out = self.conv3(out)
-
-    def freeze_darknet(self):
+    def Fine_Grained_Features(self,x):
+        pass
+    def freeze_darknet(self,input):
         #self.backbone 을 얼림 
-        
-        return out
+        model = self.features(input)
+        for params in model.parameters():
+            params.requires_grad = False

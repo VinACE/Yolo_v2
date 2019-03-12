@@ -45,7 +45,7 @@ def detection_collate(batch):
         # if using batch it should keep original image size.
         sizes.append(sample[2])
 
-        np_label = np.zeros((7, 7, 6), dtype=np.float32)
+        np_label = np.zeros((13, 13, 6), dtype=np.float32)
         for object in sample[1]:
             objectness = 1
             classes = object[0]
@@ -55,7 +55,7 @@ def detection_collate(batch):
             h_ratio = object[4]
 
             # can be acuqire grid (x,y) index when divide (1/S) of x_ratio
-            scale_factor = (1 / 7)
+            scale_factor = (1 / 13)
             grid_x_index = int(x_ratio // scale_factor)
             grid_y_index = int(y_ratio // scale_factor)
             x_offset = (x_ratio / scale_factor) - grid_x_index
@@ -93,7 +93,7 @@ class VOC(data.Dataset):
     LABEL_FOLDER = "Annotations"
     IMG_EXTENSIONS = '.jpg'
 
-    def __init__(self, root, train=True, transform=None, target_transform=None, resize=448, class_path='./voc.names', datalist_path='./'):
+    def __init__(self, root, train=True, transform=None, target_transform=None, resize=416, class_path='./voc.names', datalist_path='./'):
         self.root = root
         self.transform = transform
         self.target_transform = target_transform

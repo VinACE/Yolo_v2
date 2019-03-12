@@ -227,7 +227,7 @@ class VOC:
                 dir_names = next(os.walk(os.path.abspath(path)))[1]
                 with open(datalist_path) as f:
                      filenames =  f.read().splitlines()
-                filenames = ['000003']#,'000002','000003']#,'000004','000005','000006','000007','000008','000009',]
+                filenames = ['000001']#,'000002','000003']#,'000004','000005','000006','000007','000008','000009',]
                 for idx in range(len(filenames)):
                     filenames[idx] += '.xml'
             else:

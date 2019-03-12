@@ -12,21 +12,21 @@ from PIL import Image, ImageDraw
 num_classes = 1
 
 
-def one_hot(output, label,non_zero, device):
+def one_hot(label,non_zero, device):
 
-    label = label.cpu().data.numpy()
-    b, s1, s2, c = output.shape
-    dst = np.zeros([b, s1, s2, c], dtype=np.float32)
+    label_np = label.cpu().data.numpy()
+    b,s1,s2,c = label_np.shape
+    dst = np.zeros([b,s1,s2,20], dtype=np.float32)
     size,_ = non_zero.shape
     non_zero.cpu().data.numpy()
     for i in range(size):
-        dst[non_zero[i,0]][non_zero[i,1]][non_zero[i,2]][int(label[non_zero[i,0]][non_zero[i,1]][non_zero[i,2]])] = 1.
+        dst[non_zero[i,0]][non_zero[i,1]][non_zero[i,2]][int(label_np[non_zero[i,0]][non_zero[i,1]][non_zero[i,2]][5])] = 1.
 
     result = torch.from_numpy(dst)
     if device == 'cpu':
-        result = result.type(torch.FloatTensor)
+        result = result.type(label.dtype)
     else:
-        result = result.type(torch.FloatTensor).cuda()
+        result = result.type(label.dtype).cuda()
 
     return result
 
