@@ -139,8 +139,8 @@ def visualize_GT(images, labels, cls_list):
         draw = ImageDraw.Draw(img)
 
         # Draw 7x7 Grid in Image
-        dx = W // 7
-        dy = H // 7
+        dx = W // 13
+        dy = H // 13
 
         y_start = 0
         y_end = H
@@ -162,8 +162,8 @@ def visualize_GT(images, labels, cls_list):
         h_ratio = label[:, :, 4]
         cls = label[:, :, 5]
 
-        for i in range(7):
-            for j in range(7):
+        for i in range(13):
+            for j in range(13):
                 if obj_coord[i][j] == 1:
 
                     x_center = dx * i + int(dx * x_shift[i][j])

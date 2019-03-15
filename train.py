@@ -109,7 +109,7 @@ def train(params):
     # for epoch in range(num_epochs):
     for epoch in range(1, num_epochs + 1):
         
-        if(epoch % 90 ==0 and epoch >160):
+        if(epoch %140 ==0 and epoch < 150):
             learning_rate /= 10
             optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=1e-5)
             scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.9)
@@ -138,7 +138,7 @@ def train(params):
             one_loss.backward()
             optimizer.step()
 
-            if (((current_train_step) % 100) == 0) or (current_train_step % 10 == 0 and current_train_step < 100):
+            if (((current_train_step) % 100) == 0) or (current_train_step % 10 == 0 and current_train_step < 300):
                 print(
                     'epoch: [{}/{}], total step: [{}/{}], batch step [{}/{}], lr: {},one_loss: {:.4f}'
                     .format(epoch + 1, num_epochs, current_train_step, total_train_step, i + 1, total_step,
@@ -151,6 +151,7 @@ def train(params):
 
         # if ((epoch % 1000) == 0) and (epoch != 0):
         if ((epoch % 300) == 0) :
+        #if (one_loss <= 1) :
             save_checkpoint({
                 'epoch': epoch + 1,
                 'arch': "YOLOv2",
