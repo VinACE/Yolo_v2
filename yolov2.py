@@ -49,7 +49,7 @@ class YOLOv2(nn.Module):
         out = self.layer2(out)
         out = self.layer3(out)
         out = self.layer4(out)
-        out = out.reshape(-1,13,13,125)
+        out = out.permute(0,2,3,1)
         out[:,:,:,0] = torch.sigmoid(out[:,:,:,0])
         out[:,:,:,5:25] = torch.sigmoid(out[:,:,:,5:25])
         out[:,:,:,25] = torch.sigmoid(out[:,:,:,25])
@@ -92,7 +92,8 @@ def detection_loss_4_yolo(output, target, device):
     #obj
     non_zero = (target[:, :, :, 0]==1).nonzero()
     num_object,_ = non_zero.shape
-
+    dog = target[0,4,7,:]
+    human = target[0,6,6,:]
 
     #target & setting no obj
     ratio = torch.zeros(output.size(),dtype=output.dtype,device=device)
@@ -109,13 +110,6 @@ def detection_loss_4_yolo(output, target, device):
     target_complete_onehot = torch.cat((target[:,:,:,:5],class_label),3)
 
 
-
-
-
-
-    
-
-
     dX = 416 / 13
     dY = 416 / 13
     #iou 계산하는 식, obj 있을 때
@@ -123,6 +117,7 @@ def detection_loss_4_yolo(output, target, device):
         #anchor = (c_x,c_y,width1~5,height1~5)
         #true = same
         anchor = torch.zeros(12,dtype=output.dtype,device=device)
+        # 0~1 : grid i j
         anchor[0] = non_zero[i,1]
         anchor[1] = non_zero[i,2]
         anchor[2:7] = anchors[:,0]
@@ -146,7 +141,7 @@ def detection_loss_4_yolo(output, target, device):
             anchors[argmax_anchor_idx,0] * torch.exp( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],25 * argmax_anchor_idx + 3] )
         output[non_zero[i,0],non_zero[i,1],non_zero[i,2],25 * argmax_anchor_idx + 4] = \
             anchors[argmax_anchor_idx,1] * torch.exp( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],25 * argmax_anchor_idx + 4] )
-
+        #print(argmax_anchor_idx)
         # output[non_zero[i,0],non_zero[i,1],non_zero[i,2],25 * argmax_anchor_idx + 5 : 25 * argmax_anchor_idx + 25] = \
         #     torch.sigmoid( output[non_zero[i,0],non_zero[i,1],non_zero[i,2],25 * argmax_anchor_idx + 5 : 25 * argmax_anchor_idx + 25 ] )
 
@@ -156,15 +151,65 @@ def detection_loss_4_yolo(output, target, device):
         ratio[non_zero[i,0],non_zero[i,1],non_zero[i,2],25 * argmax_anchor_idx] = 1.
         ratio[non_zero[i,0],non_zero[i,1],non_zero[i,2],25 * argmax_anchor_idx + 1 : 25 * argmax_anchor_idx +5] = 5.
         ratio[non_zero[i,0],non_zero[i,1],non_zero[i,2],25 * argmax_anchor_idx + 5 : 25 * argmax_anchor_idx + 25 ] = 1.
-        # print(label[0,4,7,25:50])
-        # print(label[0,6,6,100:])
+        #print(label[0,6,6,100:])
+
+    # print(output[:,4,7,25:50])
+    # #print(output[:,6,6,:])
+    # print(ratio[:,4,7,25:50])
+    # print(label[:,4,7,25:50])
+
+    confidence_output = output[:,:,:,0::25]
+    x_output = output[:,:,:,1::25]
+    y_output = output[:,:,:,2::25]
+    w_output = output[:,:,:,3::25]
+    h_output = output[:,:,:,4::25]
+    class_output = torch.cat([output[:,:,:,5:25],output[:,:,:,30:50],output[:,:,:,55:75],output[:,:,:,80:100],output[:,:,:,105:125]],-1)
+
+    confidence_label = label[:,:,:,0::25]
+    x_label = label[:,:,:,1::25]
+    y_label = label[:,:,:,2::25]
+    w_label = label[:,:,:,3::25]
+    h_label = label[:,:,:,4::25]
+    class_label = torch.cat([label[:,:,:,5:25],label[:,:,:,30:50],label[:,:,:,55:75],label[:,:,:,80:100],label[:,:,:,105:125]],-1)
+
+    confidence_ratio = ratio[:,:,:,0::25]
+    x_ratio = ratio[:,:,:,1::25]
+    y_ratio = ratio[:,:,:,2::25]
+    w_ratio = ratio[:,:,:,3::25]
+    h_ratio = ratio[:,:,:,4::25]
+    class_ratio = torch.cat([ratio[:,:,:,5:25],ratio[:,:,:,30:50],ratio[:,:,:,55:75],ratio[:,:,:,80:100],ratio[:,:,:,105:125]],-1)
+
+    conf_loss = confidence_ratio*((confidence_label-confidence_output)*(confidence_label-confidence_output))
+    x_loss = x_ratio*((x_label-x_output)*(x_label-x_output))
+    y_loss = y_ratio*((y_label-y_output)*(y_label-y_output))
+    w_loss = w_ratio*((w_label-w_output)*(w_label-w_output))
+    h_loss = h_ratio*((h_label-h_output)*(h_label-h_output))
+    c_loss = class_ratio*((class_label-class_output)*(class_label-class_output))
+    
+    conf_loss = conf_loss.view(-1)
+    conf_loss = torch.sum(conf_loss)/b
+
+    x_loss = x_loss.view(-1)
+    x_loss = torch.sum(x_loss)/b
+
+    y_loss = y_loss.view(-1)
+    y_loss = torch.sum(y_loss)/b
+
+    w_loss = w_loss.view(-1)
+    w_loss = torch.sum(w_loss)/b
+
+    h_loss = h_loss.view(-1)
+    h_loss = torch.sum(h_loss)/b
+
+    c_loss = c_loss.view(-1)
+    c_loss = torch.sum(c_loss)/b
 
     loss = ratio * (label - output) * (label - output)
     loss = loss.view(-1)
-    loss = torch.sum(loss) / b
+    loss = torch.sum(loss)/b
+    #total_loss =  conf_loss + x_loss + y_loss + w_loss + h_loss + c_loss
 
-
-    return loss
+    return loss, conf_loss, x_loss+y_loss, w_loss+h_loss, c_loss
 
 def compute_iou(anchor, target):    
     

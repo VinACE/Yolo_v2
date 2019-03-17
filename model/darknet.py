@@ -109,6 +109,7 @@ class Darknet19(BaseModel):
         if pretrained:
             self.load_state_dict(model_zoo.load_url(model_paths['darknet19'],  progress=True))
             print('Model is loaded')
+            self.freeze_darknet()
 
     def forward(self, x):
         out = self.features(x)
@@ -116,8 +117,8 @@ class Darknet19(BaseModel):
         return out
     def Fine_Grained_Features(self,x):
         pass
-    def freeze_darknet(self,input):
+    def freeze_darknet(self):
         #self.backbone 을 얼림 
-        model = self.features(input)
+        model = self.features
         for params in model.parameters():
             params.requires_grad = False

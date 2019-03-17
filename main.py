@@ -9,13 +9,15 @@ parser = argparse.ArgumentParser(description='YOLO v2.')
 parser.add_argument('--mode', type=str, help='train or test', default='train')
 parser.add_argument('--dataset', type=str, help='dataset to train on, voc', default='voc')
 parser.add_argument('--data_path', type=str, help='path to the data', default='C:\Dataset\VOCdevkit\VOC2007', required=True)
+parser.add_argument('--val_data_path', type=str, help='path to the data', default='C:\Dataset\VOCdevkit\VOC2007_300\Val', required=False)
+parser.add_argument('--val_datalist_path', type=str, help='path to the data', default='./', required=False)
 parser.add_argument('--datalist_path', type=str, help='path to use dataset list to train', required=False, default="./")
 parser.add_argument('--class_path', type=str, help='path to the filenames text file',default='./names/VOC.names', required=True)
 parser.add_argument('--input_height', type=int, help='input height', default=416)
 parser.add_argument('--input_width', type=int, help='input width', default=416)
-parser.add_argument('--batch_size', type=int, help='batch size', default=4)
+parser.add_argument('--batch_size', type=int, help='batch size', default=16)
 parser.add_argument('--num_epochs', type=int, help='number of epochs', default=2500)
-parser.add_argument('--learning_rate', type=float, help='initial learning rate', default=1e-3)
+parser.add_argument('--learning_rate', type=float, help='initial learning rate', default=1e-4)
 parser.add_argument('--checkpoint_path', type=str, help='path to a specific checkpoint to load', default='./')
 
 # flag
@@ -33,6 +35,8 @@ def main():
         "mode": args.mode,
         "dataset": args.dataset,
         "data_path": args.data_path,
+        "val_data_path":args.val_data_path,
+        "val_datalist_path":args.val_datalist_path,
         "datalist_path": args.datalist_path,
         "class_path": args.class_path,
         "input_height": args.input_height,

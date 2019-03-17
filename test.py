@@ -60,10 +60,12 @@ def test(params):
     if not (datalist_path =='./'):
         root = next(os.walk(os.path.abspath(data_path)))[0]
         dir = next(os.walk(os.path.abspath(data_path)))[1]
-        files =['000001','000002','000003','000004','000005','000006','000007','000008','000009']
+        #files =['000001','000002','000003','000004','000005','000006','000007','000008','000009','000011','000012','000013','000014','000015','000016','000017','000018','000019']
+        #files = next(os.walk(os.path.abspath(data_path)))[2]
+        files =['000001']
         #with io.open(datalist_path,encoding='utf8') as f:
-        #   for i in f.readlines():
-        #       files.append(i.splitlines()[0])
+        #  for i in f.readlines():
+        #     files.append(i.splitlines()[0])
         for idx in range(len(files)):
             files[idx] += '.jpg'
 
@@ -112,11 +114,30 @@ def test(params):
         pred_bbox = torch.zeros(outputs.shape[0],outputs.shape[1],num_achors,num_class,dtype=outputs.dtype,device=outputs.device)
         final_bbox = nms(outputs,class_prob,class_threshold,num_class,img.size,anchor)
 
+        ###################################################################################
+        #mAP 측정
+        '''
+        test_dataset = VOC(root=data_path, transform=composed, class_path=class_path, datalist_path=datalist_path)
+
+        test_loader = torch.utils.data.DataLoader(dataset=train_dataset, 
+                                               batch_size=1,
+                                               shuffle=True,
+                                               collate_fn=detection_collate)
+
+        for i, (images, labels, sizes) in enumerate(train_loader):
+            # labels.shape = 1 x 13 x 13 x 6
+            labels = labels.to(device)
+
+        precision, recall = compute_mAP(final_bbox,gt_bbox)
+        '''
+        ###################################################################################
+
+
         print("IMAGE SIZE")
         print("width : {}, height : {}".format(W, H))
         print("\n\n\n\n")
-        print(outputs[4,7,25:50])
-        print(outputs[6,6,75:100])
+        #print(outputs[4,7,25:50])
+        #print(outputs[6,6,75:100])
         
         for i in range(13):
             for j in range(13):
@@ -146,15 +167,15 @@ def test(params):
             xmax = xmin + width
             ymax = ymin + height
             draw.rectangle(((xmin + 2, ymin + 2), (xmax - 2, ymax - 2)), outline="blue")
-            print(np.argmax(idx[5:5+num_class]))
-            print(5 + np.argmax(idx[5:5+num_class]))
-            draw.text((xmin + 5, ymin + 5), "{}: {:.2f}".format(class_list[np.argmax(idx[5:5+num_class])], sigmoid(idx[5 + np.argmax(idx[5:5+num_class])])))
+            #print(np.argmax(idx[5:5+num_class]))
+            #print(5 + np.argmax(idx[5:5+num_class]))
+            draw.text((xmin + 5, ymin + 5), "{}: {:.2f}".format(class_list[np.argmax(idx[5:5+num_class])], idx[5 + np.argmax(idx[5:5+num_class])]))
             draw.ellipse(((center_x - 2, center_y - 2),
                           (center_x + 2, center_y + 2)),
                          fill='blue')
     
                         # LOG
-        plt.figure(figsize=(10, 10))
+        plt.figure(figsize=(8, 8))
         plt.imshow(img)
         plt.show()
         plt.close()
