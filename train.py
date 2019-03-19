@@ -8,6 +8,7 @@ import torch
 import torchvision.transforms as transforms
 
 import yolov2
+import visdom
 from yolov2 import detection_loss_4_yolo
 from torchsummary.torchsummary import summary
 from utilities.dataloader import detection_collate
@@ -45,6 +46,7 @@ def train(params):
 
     USE_AUGMENTATION = params["use_augmentation"]
     USE_GTCHECKER = params["use_gtcheck"]
+    USE_VISDOM = params["use_visdom"]
 
     USE_GITHASH = params["use_githash"]
     num_class = params["num_class"]
@@ -60,6 +62,14 @@ def train(params):
         repo = git.Repo(search_parent_directories=True)
         sha = repo.head.object.hexsha
         short_sha = repo.git.rev_parse(sha, short=7)
+
+    if USE_VISDOM:
+        viz = visdom.Visdom(use_incoming_socket=False)
+        vis_title = 'YOLOv2'
+        vis_legend_Train = ['Train Loss']
+        vis_legend_Val = ['Val Loss']
+        iter_plot = create_vis_plot(viz, 'Iteration', 'Total Loss', vis_title, vis_legend_Train)
+        val_plot = create_vis_plot(viz, 'Iteration', 'Validation Loss', vis_title, vis_legend_Val)
 
     # 2. Data augmentation setting
     if (USE_AUGMENTATION):
@@ -172,7 +182,7 @@ def train(params):
         train_total_wh_loss = train_total_wh_loss /len(train_loader)
         train_total_c_loss = train_total_c_loss /len(train_loader)
         train_epoch_loss = train_loss / len(train_loader)
-        #update_vis_plot(viz, epoch + 1, train_epoch_loss, iter_plot, None, 'append')
+        update_vis_plot(viz, epoch + 1, train_epoch_loss, iter_plot, None, 'append')
 
         model.eval()
         with torch.no_grad():
@@ -197,7 +207,7 @@ def train(params):
             val_total_xy_loss= val_total_xy_loss / len(val_loader)
             val_total_wh_loss = val_total_wh_loss /len(val_loader)
             val_total_c_loss = val_total_c_loss /len(val_loader)
-            #update_vis_plot(viz, epoch + 1, val_epoch_loss, val_plot, None, 'append')
+            update_vis_plot(viz, epoch + 1, val_epoch_loss, val_plot, None, 'append')
 
         if (((current_train_step) % 100) == 0) or (current_train_step % 1 == 0 and current_train_step < 300):
             print(

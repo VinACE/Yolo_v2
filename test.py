@@ -38,8 +38,8 @@ def test(params):
                [11.2364, 10.0071]])
     anchor = anchors[:,:] / 13
     anchor = anchor.cpu().data.numpy()
-    objness_threshold = 0.5
-    class_threshold = 0.5
+    objness_threshold = 0.1
+    class_threshold = 0.1
 
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
@@ -62,10 +62,10 @@ def test(params):
         dir = next(os.walk(os.path.abspath(data_path)))[1]
         #files =['000001','000002','000003','000004','000005','000006','000007','000008','000009','000011','000012','000013','000014','000015','000016','000017','000018','000019']
         #files = next(os.walk(os.path.abspath(data_path)))[2]
-        files =['000001']
-        #with io.open(datalist_path,encoding='utf8') as f:
-        #  for i in f.readlines():
-        #     files.append(i.splitlines()[0])
+        files =[]
+        with io.open(datalist_path,encoding='utf8') as f:
+         for i in f.readlines():
+            files.append(i.splitlines()[0])
         for idx in range(len(files)):
             files[idx] += '.jpg'
 
@@ -145,8 +145,8 @@ def test(params):
 
         #if  one >= objness_threshold:
         for idx in final_bbox:
-            i = idx[25]
-            j = idx[26]
+            i = idx[26]
+            j = idx[25]
             anchor_idx = int(idx[27])
             x_start_point = dx * i
             y_start_point = dy * j
@@ -183,8 +183,8 @@ def test(params):
 def nms(outputs,class_prob,class_threshold,num_class,img_size,anchor):
     outputs_np = outputs.cpu().data.numpy()
     final_bbox = []
-    for i in range(outputs.shape[0]):
-        for j in range(outputs.shape[1]):
+    for j in range(outputs.shape[0]):
+        for i in range(outputs.shape[1]):
             output1 = outputs[i,j,:25]
             output2 = outputs[i,j,25:50]
             output3 = outputs[i,j,50:75]
@@ -247,8 +247,8 @@ def compute_iou(pred_bbox, true_bbox, img_size, anchor):
     true_bbox_w = anchor[true_achor_idx,0] * np.exp(true_bbox[3])
     true_bbox_h = anchor[true_achor_idx,1] * np.exp(true_bbox[4])
 
-    pred_bbox_c_x = ( pred_bbox[1] + pred_bbox[25] ) * w
-    pred_bbox_c_y = ( pred_bbox[2] + pred_bbox[26] ) * h
+    pred_bbox_c_x = ( pred_bbox[1] + pred_bbox[26] ) * w
+    pred_bbox_c_y = ( pred_bbox[2] + pred_bbox[25] ) * h
     pred_bbox_w = pred_bbox_w #* pred_bbox_w
     pred_bbox_h = pred_bbox_h #* pred_bbox_h
 
@@ -257,8 +257,8 @@ def compute_iou(pred_bbox, true_bbox, img_size, anchor):
     pred_bbox_ymin = pred_bbox_c_y - pred_bbox_h/2
     pred_bbox_ymax = pred_bbox_c_y + pred_bbox_h/2
 
-    true_bbox_c_x = ( true_bbox[1] + true_bbox[25] ) * w
-    true_bbox_c_y = ( true_bbox[2] + true_bbox[26] ) * h
+    true_bbox_c_x = ( true_bbox[1] + true_bbox[26] ) * w
+    true_bbox_c_y = ( true_bbox[2] + true_bbox[25] ) * h
     true_bbox_w = true_bbox_w #* true_bbox_w
     true_bbox_h = true_bbox_h #* true_bbox_h
 

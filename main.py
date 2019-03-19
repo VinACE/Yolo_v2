@@ -24,6 +24,7 @@ parser.add_argument('--checkpoint_path', type=str, help='path to a specific chec
 parser.add_argument('--use_augmentation', type=lambda x: (str(x).lower() == 'true'), help='Image Augmentation', default=False)
 parser.add_argument('--use_gtcheck', type=lambda x: (str(x).lower() == 'true'), help='Ground Truth check flag', default=False)
 parser.add_argument('--use_githash', type=lambda x: (str(x).lower() == 'true'), help='use githash to checkpoint', default=False)
+parser.add_argument('--use_visdom', type=lambda x: (str(x).lower() == 'true'), help='use githash to checkpoint', default=False)
 
 # develop
 parser.add_argument('--num_class', type=int, help='number of class', default='20', required=True)
@@ -51,6 +52,7 @@ def main():
         "num_class": args.num_class,
         "use_gtcheck": args.use_gtcheck,
         "use_githash": args.use_githash,
+        "use_visdom": args.use_visdom
     }
 
     if params["mode"] == "train":
