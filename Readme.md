@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/ryol8888/Yolo_v2.svg?branch=master)](https://travis-ci.com/ryol8888/Yolo_v2)
 # A PyTorch implementation of a YOLO v1 Object Detector
  Implementation of YOLO v1 object detector in PyTorch. Full tutorial can be found [here](https://deepbaksuvision.github.io/Modu_ObjectDetection/) in korean.
 
