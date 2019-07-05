@@ -8,11 +8,11 @@ from test import test
 parser = argparse.ArgumentParser(description='YOLO v2.')
 parser.add_argument('--mode', type=str, help='train or test', default='train')
 parser.add_argument('--dataset', type=str, help='dataset to train on, voc', default='voc')
-parser.add_argument('--data_path', type=str, help='path to the data', default='C:\Dataset\VOCdevkit\VOC2007', required=True)
-parser.add_argument('--val_data_path', type=str, help='path to the data', default='C:\Dataset\VOCdevkit\VOC2007_300\Val', required=False)
+parser.add_argument('--data_path', type=str, help='path to the data', default='/home/madhevan/mrcnn/IDRBTcheque/train/', required=True)
+parser.add_argument('--val_data_path', type=str, help='path to the data', default='/home/madhevan/mrcnn/IDRBTcheque/train/Val', required=False)
 parser.add_argument('--val_datalist_path', type=str, help='path to the data', default='./', required=False)
 parser.add_argument('--datalist_path', type=str, help='path to use dataset list to train', required=False, default="./")
-parser.add_argument('--class_path', type=str, help='path to the filenames text file',default='./names/VOC.names', required=True)
+parser.add_argument('--class_path', type=str, help='path to the filenames text file',default='/home/madhevan/mrcnn/IDRBTcheque/train/classes.txt', required=True)
 parser.add_argument('--input_height', type=int, help='input height', default=416)
 parser.add_argument('--input_width', type=int, help='input width', default=416)
 parser.add_argument('--batch_size', type=int, help='batch size', default=16)
@@ -27,7 +27,7 @@ parser.add_argument('--use_githash', type=lambda x: (str(x).lower() == 'true'), 
 parser.add_argument('--use_visdom', type=lambda x: (str(x).lower() == 'true'), help='use githash to checkpoint', default=False)
 
 # develop
-parser.add_argument('--num_class', type=int, help='number of class', default='20', required=True)
+parser.add_argument('--num_class', type=int, help='number of class', default='5', required=True)
 args = parser.parse_args()
 
 
