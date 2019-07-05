@@ -11,7 +11,7 @@ from model import darknet
 def main():
     imageNet_label = [line.strip() for line in open("/home/madhevan/mrcnn/IDRBTcheque/demo/classes.txt", 'r')]
     import pdb;pdb.set_trace()
-    dataset = dset.ImageFolder(root="/home/madhevan/mrcnn/IDRBTcheque/demo/",
+    dataset = dset.ImageFolder(root="/home/madhevan/mrcnn/IDRBTcheque/demo",
                            transform=transforms.Compose([
                                transforms.Resize((448, 448)),
                                transforms.ToTensor()
