@@ -221,7 +221,7 @@ def nms(outputs,class_prob,class_threshold,num_class,img_size,anchor):
         sort_class_prob = class_prob_view_np[idx]
         test_threshold = sort_class_prob[0,i+5]
         if(test_threshold >= class_threshold):
-            
+            import pdb;pdb.set_trace()
             while(sort_class_prob[leaderboard,i+5] >= class_threshold):
                 iou = compute_iou(sort_class_prob[0,:],sort_class_prob[leaderboard,:],img_size,anchor)
                 if iou < 0.5:
