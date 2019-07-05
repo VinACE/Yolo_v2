@@ -20,7 +20,7 @@ def main():
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False)
 
     # darknet19 = darknet.Darknet19()
-
+    model = darknet.Darknet19()
     checkpoint = torch.load("/home/madhevan/Yolo_v2/ckpt_noHash_ep00010_loss103.5820_lr0.0001.pth.tar")
     try:
         checkpoint.eval()
@@ -28,13 +28,13 @@ def main():
         print(error)
 
     # ### 'dict' object has no attribute 'eval'
-    # darknet19.load_state_dict(checkpoint['state_dict'])
-    # darknet19.eval()
+    darknet19.load_state_dict(checkpoint['state_dict'])
+    darknet19.eval()
     # darknet19 =  checkpoint
 
     for data, _ in dataloader:
-        # output = darknet19.forward(data)
-        output = checkpoint.forward(data)
+        output = darknet19.forward(data)
+        #output = checkpoint.forward(data)
         answer = int(torch.argmax(output))
         print("Class: {}({})".format(imageNet_label[answer],answer))
         plt.imshow(np.array(np.transpose(data[0], (1, 2, 0))))
