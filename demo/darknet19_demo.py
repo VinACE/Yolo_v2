@@ -9,9 +9,9 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from model import darknet
 
 def main():
-    imageNet_label = [line.strip() for line in open("D:\pytorch-darknet19-master\pytorch-darknet19-master/demo/imagenet.shortnames.list", 'r')]
+    imageNet_label = [line.strip() for line in open("/home/madhevan/mrcnn/IDRBTcheque/demo/classes.txt", 'r')]
 
-    dataset = dset.ImageFolder(root="D:\pytorch-darknet19-master\pytorch-darknet19-master/demo/samples/",
+    dataset = dset.ImageFolder(root="/home/madhevan/mrcnn/IDRBTcheque/demo/",
                            transform=transforms.Compose([
                                transforms.Resize((448, 448)),
                                transforms.ToTensor()
