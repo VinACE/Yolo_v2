@@ -93,6 +93,7 @@ def train(params):
     # composed
     # transforms.ToTensor
     #TODO : Datalist가 있을때 VOC parsing
+    import pdb;pdb.set_trace()
     train_dataset = VOC(root=data_path,transform=composed, class_path=class_path, datalist_path=datalist_path)
 
     train_loader = torch.utils.data.DataLoader(dataset=train_dataset,
