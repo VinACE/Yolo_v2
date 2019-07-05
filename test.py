@@ -230,7 +230,8 @@ def nms(outputs,class_prob,class_threshold,num_class,img_size,anchor):
             
             final_bbox.append(sort_class_prob[0,:])
             
-                
+        print(i)   
+        print(final_bbox)     
     return final_bbox
     #output = 13 x 13 x 25 x n
 
