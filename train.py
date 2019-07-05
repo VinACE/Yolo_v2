@@ -225,8 +225,8 @@ def train(params):
         if not USE_GITHASH:
             short_sha = 'noHash'
 
-        if ((epoch % 1000) == 0) and (epoch != 0):
-        #if ((epoch % 100) == 0) :
+        # if ((epoch % 1000) == 0) and (epoch != 0):
+        if ((epoch % 100) == 0) :
         #if (one_loss <= 1) :
             save_checkpoint({
                 'epoch': epoch + 1,
