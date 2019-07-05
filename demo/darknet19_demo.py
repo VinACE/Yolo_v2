@@ -28,6 +28,8 @@ def main():
 
     # ### 'dict' object has no attribute 'eval'
     darknet19.load_state_dict(checkpoint['state_dict'])
+    # model.load_state_dict(torch.load(’/path/to/model.pth.tar’))
+    # https://discuss.pytorch.org/t/fine-tuning-resnet-dataparallel-object-has-no-attribute-fc/14842/3
     darknet19.eval()
     # darknet19 =  checkpoint
 
