@@ -28,12 +28,13 @@ def main():
         print(error)
 
     # ### 'dict' object has no attribute 'eval'
-    darknet19.load_state_dict(checkpoint['state_dict'])
-    darknet19.eval()
+    # darknet19.load_state_dict(checkpoint['state_dict'])
+    # darknet19.eval()
     # darknet19 =  checkpoint
 
     for data, _ in dataloader:
-        output = darknet19.forward(data)
+        # output = darknet19.forward(data)
+        output = checkpoint.forward(data)
         answer = int(torch.argmax(output))
         print("Class: {}({})".format(imageNet_label[answer],answer))
         plt.imshow(np.array(np.transpose(data[0], (1, 2, 0))))
