@@ -111,7 +111,7 @@ def test(params):
         outputs = outputs.view(w, h, c)
         threshold_map = torch.zeros(13,13,20,dtype=outputs.dtype,device=outputs.device)
         # class_prob = torch.zeros(13,13,5,28,dtype=outputs.dtype,device=outputs.device)
-        class_prob = torch.zeros(13,13,25,28,dtype=outputs.dtype,device=outputs.device)
+        class_prob = torch.zeros(13,13,25,28,dtype=outputs.dtype,device=outputs.device) ## TODO need to check this for the threshold error...
         pred_bbox = torch.zeros(outputs.shape[0],outputs.shape[1],num_achors,num_class,dtype=outputs.dtype,device=outputs.device)
         final_bbox = nms(outputs,class_prob,class_threshold,num_class,img.size,anchor)
 
@@ -229,7 +229,7 @@ def nms(outputs,class_prob,class_threshold,num_class,img_size,anchor):
                     final_bbox.append(sort_class_prob[leaderboard,:])
                 leaderboard +=1
 
-            print(i) 
+            # print(i) 
             final_bbox.append(sort_class_prob[0,:])
             
               
