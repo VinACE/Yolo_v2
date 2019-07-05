@@ -19,9 +19,16 @@ def main():
     
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False)
 
-    # darknet19 = darknet.Darknet19(pretrained=True)
-    darknet19 = torch.load("/home/madhevan/Yolo_v2/ckpt_noHash_ep00010_loss103.5820_lr0.0001.pth.tar")
-    print("model loaded")
+    darknet19 = darknet.Darknet19(pretrained=True)
+
+    checkpopint = torch.load("/home/madhevan/Yolo_v2/ckpt_noHash_ep00010_loss103.5820_lr0.0001.pth.tar")
+    try:
+        checkpoint.eval()
+    except AttributeError as error:
+        print(error)
+
+    ### 'dict' object has no attribute 'eval'
+    darknet19.load_state_dict(checkpoint['state_dict'])
     darknet19.eval()
 
     for data, _ in dataloader:
