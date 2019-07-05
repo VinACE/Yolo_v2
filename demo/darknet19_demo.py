@@ -21,6 +21,7 @@ def main():
 
     # darknet19 = darknet.Darknet19(pretrained=True)
     darknet19 = torch.load("/home/madhevan/Yolo_v2/ckpt_noHash_ep00010_loss103.5820_lr0.0001.pth.tar")
+    print("model loaded")
     darknet19.eval()
 
     for data, _ in dataloader:
