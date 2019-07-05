@@ -10,13 +10,13 @@ from model import darknet
 
 def main():
     imageNet_label = [line.strip() for line in open("/home/madhevan/mrcnn/IDRBTcheque/demo/classes.txt", 'r')]
-
+    import pdb;pdb.set_trace()
     dataset = dset.ImageFolder(root="/home/madhevan/mrcnn/IDRBTcheque/demo/",
                            transform=transforms.Compose([
                                transforms.Resize((448, 448)),
                                transforms.ToTensor()
                            ]))
-    import pdb;pdb.set_trace()
+    
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False)
 
     darknet19 = darknet.Darknet19(pretrained=True)
