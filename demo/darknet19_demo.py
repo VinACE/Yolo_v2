@@ -27,9 +27,10 @@ def main():
     except AttributeError as error:
         print(error)
 
-    ### 'dict' object has no attribute 'eval'
-    darknet19.load_state_dict(checkpoint['state_dict'])
-    darknet19.eval()
+    # ### 'dict' object has no attribute 'eval'
+    # darknet19.load_state_dict(checkpoint['state_dict'])
+    # darknet19.eval()
+    darknet =  checkpoint
 
     for data, _ in dataloader:
         output = darknet19.forward(data)
