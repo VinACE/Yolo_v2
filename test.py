@@ -238,6 +238,7 @@ def nms(outputs,class_prob,class_threshold,num_class,img_size,anchor):
             
             print("final box count")
             print(len(final_bbox))
+            print(final_bbox.shape)
             print(final_bbox)     
     return final_bbox
     #output = 13 x 13 x 25 x n
