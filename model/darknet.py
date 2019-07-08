@@ -105,7 +105,7 @@ class Darknet19(BaseModel):
         ]))
 
         self.classifier = nn.Sequential(OrderedDict([
-        ('conv7_1', nn.Conv2d(1024, 1000, kernel_size=(1, 1), stride=(1, 1))),
+        ('conv7_1', nn.Conv2d(1024, 5, kernel_size=(1, 1), stride=(1, 1))),
         ('globalavgpool', GlobalAvgPool2d()),
         ('softmax', nn.Softmax(dim=1))
         ]))
