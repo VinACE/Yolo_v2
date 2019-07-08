@@ -19,20 +19,22 @@ def main():
     
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False)
 
-    darknet19 = darknet.Darknet19()
-    checkpoint = torch.load("/home/madhevan/Yolo_v2/ckpt_noHash_ep00010_loss103.5820_lr0.0001.pth.tar")
-    try:
-        checkpoint.eval()
-    except AttributeError as error:
-        print(error)
+    # darknet19 = darknet.Darknet19()
+    # checkpoint = torch.load("/home/madhevan/Yolo_v2/ckpt_noHash_ep00010_loss103.5820_lr0.0001.pth.tar")
+    # try:
+    #     checkpoint.eval()
+    # except AttributeError as error:
+    #     print(error)
 
-    # ### 'dict' object has no attribute 'eval'
-    darknet19.load_state_dict(checkpoint['state_dict'])
-    # model.load_state_dict(torch.load(’/path/to/model.pth.tar’))
-    # https://discuss.pytorch.org/t/fine-tuning-resnet-dataparallel-object-has-no-attribute-fc/14842/3
+    # # ### 'dict' object has no attribute 'eval'
+    # darknet19.load_state_dict(checkpoint['state_dict'])
+    # # model.load_state_dict(torch.load(’/path/to/model.pth.tar’))
+    # # https://discuss.pytorch.org/t/fine-tuning-resnet-dataparallel-object-has-no-attribute-fc/14842/3
+    # darknet19.eval()
+    # # darknet19 =  checkpoint
+
+    darknet19 = darknet.Darknet19(pretrained=True)
     darknet19.eval()
-    # darknet19 =  checkpoint
-
     for data, _ in dataloader:
         output = darknet19.forward(data)
         #output = checkpoint.forward(data)

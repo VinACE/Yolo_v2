@@ -4,8 +4,12 @@ import torch.nn.functional as F
 import torch.utils.model_zoo as model_zoo
 from base import BaseModel
 
+# model_paths = {
+#     'darknet19': 'https://s3.ap-northeast-2.amazonaws.com/deepbaksuvision/darknet19-deepBakSu-e1b3ec1e.pth'
+# }
+
 model_paths = {
-    'darknet19': 'https://s3.ap-northeast-2.amazonaws.com/deepbaksuvision/darknet19-deepBakSu-e1b3ec1e.pth'
+    'darknet19': '/home/madhevan/Yolo_v2/ckpt_noHash_ep00010_loss103.5820_lr0.0001.pth.tar'
 }
 
 class GlobalAvgPool2d(nn.Module):
