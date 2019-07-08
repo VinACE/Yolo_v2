@@ -54,6 +54,8 @@ def test(params):
     model.load_state_dict(torch.load(checkpoint_path)["state_dict"])
     # model.load_state_dict(torch.load("/home/madhevan/Yolo_v2/ckpt_noHash_ep00100_loss12.2638_lr0.0001.pth.tar"))
     model.eval()
+
+    # https://discuss.pytorch.org/t/loading-weights-from-dataparallel-models/20570/3
     
 
     image_path = os.path.join(data_path, "JPEGImages")
@@ -111,8 +113,8 @@ def test(params):
         b, w, h, c = outputs.shape
         outputs = outputs.view(w, h, c)
         threshold_map = torch.zeros(13,13,20,dtype=outputs.dtype,device=outputs.device)
-        # class_prob = torch.zeros(13,13,5,28,dtype=outputs.dtype,device=outputs.device)
-        class_prob = torch.zeros(13,13,25,28,dtype=outputs.dtype,device=outputs.device) ## TODO need to check this for the threshold error...
+        class_prob = torch.zeros(13,13,5,28,dtype=outputs.dtype,device=outputs.device)
+        # class_prob = torch.zeros(13,13,25,28,dtype=outputs.dtype,device=outputs.device) ## TODO need to check this for the threshold error...
         pred_bbox = torch.zeros(outputs.shape[0],outputs.shape[1],num_achors,num_class,dtype=outputs.dtype,device=outputs.device)
         final_bbox = nms(outputs,class_prob,class_threshold,num_class,img.size,anchor)
 
@@ -183,6 +185,7 @@ def test(params):
         plt.close()
 
 def nms(outputs,class_prob,class_threshold,num_class,img_size,anchor):
+    import pdb;pdb.set_trace()
     outputs_np = outputs.cpu().data.numpy()
     final_bbox = []
     for j in range(outputs.shape[0]):
