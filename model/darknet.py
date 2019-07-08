@@ -27,7 +27,7 @@ class GlobalAvgPool2d(nn.Module):
 
 
 class Darknet19(BaseModel):
-    def __init__(self, pretrained=True):
+    def __init__(self, pretrained=False):
         super(Darknet19, self).__init__()
 
         self.features = nn.Sequential(OrderedDict([
