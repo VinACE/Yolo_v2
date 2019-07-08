@@ -112,7 +112,7 @@ class Darknet19(BaseModel):
 
         if pretrained:
             self.load_state_dict(model_zoo.load_url(model_paths['darknet19'],  progress=True))
-            print('Model is loaded')
+            print('Model is loaded from model zoo')
             self.freeze_darknet()
 
     def forward(self, x):
