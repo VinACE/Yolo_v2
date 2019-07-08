@@ -33,7 +33,7 @@ def main():
     # darknet19.eval()
     # # darknet19 =  checkpoint
 
-    darknet19 = darknet.Darknet19(pretrained=True)
+    darknet19 = darknet.Darknet19(pretrained=False)
     darknet19.eval()
     for data, _ in dataloader:
         output = darknet19.forward(data)
