@@ -37,9 +37,9 @@ def main():
     darknet19.eval()
     for data, _ in dataloader:
         output = darknet19.forward(data)
-        #output = checkpoint.forward(data)
+        # output = checkpoint.forward(data)
         answer = int(torch.argmax(output))
-        print("Class: {}({})".format(imageNet_label[answer],answer))
+        # print("Class: {}({})".format(imageNet_label[answer],answer))
         plt.imshow(np.array(np.transpose(data[0], (1, 2, 0))))
         plt.show()
 
