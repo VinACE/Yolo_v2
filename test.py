@@ -52,7 +52,7 @@ def test(params):
         model = torch.nn.DataParallel(net, device_ids=num_gpus).cuda()
 
     # model.load_state_dict(torch.load(checkpoint_path)["state_dict"])
-    model.load_state_dict(torch.load("/home/madhevan/Yolo_v2/ckpt_noHash_ep00100_loss12.1128_lr0.0001.pth.tar"))
+    model.load_state_dict(torch.load("/home/madhevan/Yolo_v2/ckpt_noHash_ep00100_loss12.2638_lr0.0001.pth.tar"))
     model.eval()
     
 
