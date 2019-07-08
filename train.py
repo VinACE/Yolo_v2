@@ -237,4 +237,4 @@ def train(params):
             }, False, filename=os.path.join(checkpoint_path, 'ckpt_{}_ep{:05d}_loss{:.04f}_lr{}.pth.tar'.format(short_sha, epoch, one_loss.item(), ([param_group['lr'] for param_group in optimizer.param_groups])[0])))
             # print(dir(model))
             filename = os.path.join(checkpoint_path, 'ckpt_{}_ep{:05d}_loss{:.04f}_lr{}.pth.tar'.format(short_sha, epoch, one_loss.item(), ([param_group['lr'] for param_group in optimizer.param_groups])[0]))
-            torch.save(model,filename)
+            torch.save(model.module.state_dict(),filename)
