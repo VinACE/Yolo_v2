@@ -53,7 +53,7 @@ def test(params):
 
     model.load_state_dict(torch.load(checkpoint_path)["state_dict"])
     model.eval()
-
+    
 
     image_path = os.path.join(data_path, "JPEGImages")
 
